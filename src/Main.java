@@ -1,5 +1,6 @@
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+
+        MainFrame frame = new MainFrame("Click the cards to flip them!");
     }
 }
