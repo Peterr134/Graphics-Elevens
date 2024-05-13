@@ -11,11 +11,14 @@ class DrawPanel extends JPanel implements MouseListener {
 
     private ArrayList<Card> hand;
     private Rectangle button;
+    private ArrayList<Card> deck;
 
     public DrawPanel() {
         button = new Rectangle(147, 230, 160, 26);
         this.addMouseListener(this);
-        hand = Card.buildHand();
+        deck = Card.buildDeck();
+        hand = Card.buildHand(deck);
+
     }
 
     protected void paintComponent(Graphics g) {
@@ -40,7 +43,7 @@ class DrawPanel extends JPanel implements MouseListener {
             x = 125;
         }
         g.setFont(new Font("Courier New", Font.BOLD, 20));
-        g.drawString("GET NEW CARDS", 150, 250);
+        g.drawString("Check (NYI)", 150, 250);
         g.drawRect((int)button.getX(), (int)button.getY(), (int)button.getWidth(), (int)button.getHeight());
     }
 
@@ -50,6 +53,7 @@ class DrawPanel extends JPanel implements MouseListener {
 
         if (e.getButton() == 1) {
             if (button.contains(clicked)) {
+                //TODO: Put code here to check if all highlighted cards are valid
                 hand = Card.buildHand();
             }
 
@@ -67,9 +71,14 @@ class DrawPanel extends JPanel implements MouseListener {
                 if (box.contains(clicked)) {
                     Card card = hand.get(i);
                     if(card.getHighlight()){
-
+                        //code for replacing a card
+                        if(deck.size() != 0) {
+                            hand.set(i, deck.remove((int) (Math.random() * deck.size())));
+                        }else{
+                            card.setShow(false);
+                        }
                     }
-                    hand.get(i).flipHighlight();
+                    card.flipHighlight();
                 }
             }
         }
