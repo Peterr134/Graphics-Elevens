@@ -13,12 +13,14 @@ class DrawPanel extends JPanel implements MouseListener {
     private Rectangle button;
     private ArrayList<Card> deck;
     private int gameStatus;
+    private int hiddenCards;
 
     public DrawPanel() {
         button = new Rectangle(147, 230, 160, 26);
         this.addMouseListener(this);
         deck = Card.buildDeck();
         hand = Card.buildHand(deck);
+        hiddenCards = 0;
     }
 
     protected void paintComponent(Graphics g) {
@@ -78,6 +80,7 @@ class DrawPanel extends JPanel implements MouseListener {
                         hand.set(i, deck.remove((int) (Math.random() * deck.size())));
                     }else{
                         card.setShow(false);
+                        hiddenCards++;
                     }
                 }
             }else{
@@ -110,7 +113,7 @@ class DrawPanel extends JPanel implements MouseListener {
     }
 
     public void updateGameStatus(){
-        if(deck.size() == 0 && hand.size() == 0){
+        if(deck.size() == 0 && hand.size()-hiddenCards == 0){
             gameStatus = 2;
             //win!
         }else if(!validMovePossible()){
@@ -130,6 +133,7 @@ class DrawPanel extends JPanel implements MouseListener {
         for(int i = 0; i < hand.size(); i++){
             for(int a = 0; a < hand.size(); a++){
                 if(hand.get(i).getPointValue() + hand.get(a).getPointValue() == 11){
+                    //System.out.println("Valid by Cards, with " + hand.get(i).getPointValue() + " (" + hand.get(i).getSuit() + hand.get(i).getValue() + ") and " + hand.get(a).getPointValue() + " (" + hand.get(a).getSuit() + hand.get(a).getValue() + ")");
                     return true;
                 }
                 if(hand.get(i).getPointValue() == -100){
@@ -144,9 +148,11 @@ class DrawPanel extends JPanel implements MouseListener {
             }
         }
         if(qP && kP && jP){
+            //System.out.println("Valid by JQK");
             return true;
+        }else {
+            return false;
         }
-        return false;
     }
 
     public void mouseReleased(MouseEvent e) { }
